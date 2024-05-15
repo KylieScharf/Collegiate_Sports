@@ -66,19 +66,23 @@ plot
 ```
 
 ```{r}
+library(rstatix)
 library(kableExtra)
 table <- sports_dat |>
   group_by(Sport, year) |>
   filter(total_exp_menwomen != 0) |>
   summarise(mean_exp = mean(total_exp_menwomen)) |>
   pivot_wider(id_cols = year, names_from = Sport, values_from = mean_exp) |>
-  rename(Year=year, Expenses_Baseball=Baseball, Expenses_Softball=Softball)
+  rename(Year=year, Expenses_Men=Baseball, Expenses_Women=Softball)
 
-kable(table)
+kable(table,
+      caption="CA Collegiate Baseball and Softball Expenses",
+      col.names = c("Year", 
+                    "Expenses Men ($)", 
+                    "Expenses Women ($)")) |>
+  kable_classic() |>
+  kable_styling(full_width = FALSE, position = "center") |>
+  footnote(general="Source: Department of Education")
+t_test(sports_dat, total_exp_menwomen~Sport, alternative="greater")
 ```
-```{r}
-library(rstatix)
-t_test(sports_dat, total_exp_menwomen~Sport) 
-```
-
 
