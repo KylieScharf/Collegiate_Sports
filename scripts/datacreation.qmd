@@ -1,0 +1,30 @@
+```{r} 
+library(tidyverse)
+library(writexl)
+#loading in data
+tuesdata <- tidytuesdayR::tt_load('2022-03-29')
+sports_dat <- tuesdata$sports
+
+```
+
+```{r}
+#moving original data to data file
+write_xlsx(sports_dat, "data/original_sub/original.xlsx")
+```
+
+
+```{r}
+#subsetting and moving data
+library(tidyverse)
+sports_dat <- sports_dat |>
+  filter(sports == "Baseball" | sports == "Softball") |>
+  mutate(
+    rev_men = ifelse(is.na(rev_men), 0, rev_men),
+    rev_women = ifelse(is.na(rev_women), 0, rev_women),
+    exp_men = ifelse(is.na(exp_men), 0, exp_men),
+    exp_women = ifelse(is.na(exp_women), 0, exp_women),
+  ) |>
+  filter(state_cd == "CA") 
+
+write_xlsx(sports_dat, "data/subsetted.xlsx")
+```
