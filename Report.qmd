@@ -68,8 +68,8 @@ plot
 ```{r}
 sports_dat |>
   group_by(Sport, year) |>
-  filter(exp_men != 0 | exp_women !=0) |>
-  summarise(mean_exp_men = mean(exp_men), mean_exp_women = mean(exp_women)) 
+  filter(total_exp_menwomen != 0) |>
+  summarise(mean_exp = mean(total_exp_menwomen)) 
   
 ```
 
