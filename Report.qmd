@@ -2,7 +2,7 @@
 title: "California's Unlevel Playing Field"
 authors: "Emma Durler, Kylie Scharf, Nicole Yee, Curtis LeQuang"
 format: 
-  html:
+  pdf:
     embed-resources: true
     code-tools: true
     toc: true
@@ -39,14 +39,14 @@ sports_dat <- sports_dat |>
     exp_women = ifelse(is.na(exp_women), 0, exp_women),
   ) |>
   filter(state_cd == "CA") 
+
+sports_dat <- sports_dat |>
+  rename(Sport = sports)
 ```
 
 ```{r}
 #| fig-alt: "The figure shows an overall positive trend for both college softball and baseball between average expenses and time from 2015 to 2018 for colleges in California. In 2019, however, the figure displays a slight negative trend for the average expenses for both sports. There appears to be more variability in the average expenses for baseball than for softball in any particular year. The average expenses for baseball are consistantly signifigantly larger than the expenses for women, although the expenses for both sports tend to increase at a similiar rate over time."
 #| fig-cap: "Above entails an analysis of the differences in average expenses from 2015 to 2019 for collegiate baseball and softball in California. The Department of Education collects data yearly on collegiate sports budgets in accordance to The Equity in Althletics Disclosure Act. The graph above consists of such data subsetted to contain soley softball and baseball teams from California in the years 2015 to 2019. The expense for a particular year averaged over all California softball teams is plotted as a blue triangle, wheras the expense averaged over all California baseball teams in a particular year is plotted as a red circle. The highlighted region represents adding or subtracting one standard error of the average from the plotted averages. There appears to be more variability in the average expenses for baseball than for softball in any particular year in California. The average expenses for baseball are consistantly signifigantly larger than the expenses for women, although the expenses for both sports tend to increase at a similiar rate over time."
-
-sports_dat <- sports_dat |>
-  rename(Sport = sports)
 
 
 plot <- sports_dat |>
@@ -64,3 +64,12 @@ scale_y_continuous(labels = scales::dollar)
 plot
 
 ```
+
+```{r}
+sports_dat |>
+  group_by(Sport, year) |>
+  filter(exp_men != 0 | exp_women !=0) |>
+  summarise(mean_exp_men = mean(exp_men), mean_exp_women = mean(exp_women)) 
+  
+```
+
