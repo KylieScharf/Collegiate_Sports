@@ -66,10 +66,15 @@ plot
 ```
 
 ```{r}
-sports_dat |>
+library(rstatix)
+table <- sports_dat |>
   group_by(Sport, year) |>
   filter(total_exp_menwomen != 0) |>
-  summarise(mean_exp = mean(total_exp_menwomen)) 
-  
+  summarise(mean_exp = mean(total_exp_menwomen)) |>
+  pivot_wider(id_cols = year, names_from = Sport, values_from = mean_exp) |>
+  rename(Year=year, Expenses_Men=Baseball, Expenses_Women=Softball)
+
+table  
+t_test(sports_dat, total_exp_menwomen~Sport) 
 ```
 
