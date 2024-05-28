@@ -81,7 +81,7 @@ table <- sports_dat |>
   rename(Year=year, Expenses_Men=Baseball, Expenses_Women=Softball)
 
 kable(table,
-      caption="CA Collegiate Baseball and Softball Expenses",
+      caption="<center>Table 1: CA Collegiate Baseball and Softball Expenses<center>",
       col.names = c("Year", 
                     "Expenses Baseball ($)", 
                     "Expenses Softball ($)")) |>
