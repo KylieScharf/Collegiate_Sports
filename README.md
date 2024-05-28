@@ -1,4 +1,4 @@
 # Collegiate_Sports
 
 * Data
-  - xxx.csv
+- xxx.csv
