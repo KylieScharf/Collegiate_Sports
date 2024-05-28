@@ -1,0 +1,42 @@
+```{r}
+library(tidyverse)
+library(readxl)
+library(writexl)
+library(rstatix)
+library(tidyverse)
+library(kableExtra)
+tuesdata <- tidytuesdayR::tt_load('2022-03-29')
+sports_dat <- tuesdata$sports
+```
+
+```{r}
+#subsetting and moving data
+sports_dat <- sports_dat |>
+  filter(sports == "Baseball" | sports == "Softball", state_cd == "CA") |>
+  rename(Sport = sports) |>
+  group_by(Sport, year) |>
+  pivot_wider(id_cols = year:sector_name, names_from = Sport, values_from = exp_men:exp_women) |>
+  mutate(diff = exp_men_Baseball - exp_women_Softball) |>
+  drop_na(exp_men_Baseball, exp_women_Softball, diff)
+```
+
+```{r}
+#data table using kable
+table <- sports_dat |>
+  group_by(year) |>
+  summarize(mean_exp_men = mean(exp_men_Baseball), 
+            mean_exp_women = mean(exp_women_Softball),
+            mean_diff = mean(diff)
+  ) 
+
+kable(table,
+      caption="Table 1. Average expenses for baseball and softball and the average differences between the two for participating California colleges between 2015 and 2019",
+      col.names = c("Year", 
+                    "Baseball Expenses ($)", 
+                    "Softball Expenses ($)",
+                    "Differences ($)"
+                    )) |>
+  kable_classic() |>
+  kable_styling(full_width = FALSE, position = "center") |>
+  footnote(general="Source: Department of Education")
+```

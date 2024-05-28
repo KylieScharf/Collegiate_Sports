@@ -15,17 +15,15 @@ write_xlsx(sports_dat, "data/original_sub/original.xlsx")
 
 ```{r}
 #subsetting and moving data
+library(rstatix)
+library(tidyverse)
 sports_dat <- sports_dat |>
-  filter(sports == "Baseball" | sports == "Softball") |>
-  mutate(
-    rev_men = ifelse(is.na(rev_men), 0, rev_men),
-    rev_women = ifelse(is.na(rev_women), 0, rev_women),
-    exp_men = ifelse(is.na(exp_men), 0, exp_men),
-    exp_women = ifelse(is.na(exp_women), 0, exp_women),
-  ) |>
-  filter(state_cd == "CA") |>
+  filter(sports == "Baseball" | sports == "Softball", state_cd == "CA") |>
   rename(Sport = sports) |>
   group_by(Sport, year) |>
   pivot_wider(id_cols = year:sector_name, names_from = Sport, values_from = exp_men:exp_women) |>
-  mutate(diff = exp_men_Baseball - exp_women_Softball)
+  mutate(diff = exp_men_Baseball - exp_women_Softball) |>
+  drop_na(exp_men_Baseball, exp_women_Softball, diff)
+
+write_xlsx(sports_dat, "data/subsetted.xlsx")
 ```

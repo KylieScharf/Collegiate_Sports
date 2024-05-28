@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>graph</title>
+<title>table</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,16 +57,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="graph_files/libs/clipboard/clipboard.min.js"></script>
-<script src="graph_files/libs/quarto-html/quarto.js"></script>
-<script src="graph_files/libs/quarto-html/popper.min.js"></script>
-<script src="graph_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="graph_files/libs/quarto-html/anchor.min.js"></script>
-<link href="graph_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="graph_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="graph_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="graph_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="graph_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="table_files/libs/clipboard/clipboard.min.js"></script>
+<script src="table_files/libs/quarto-html/quarto.js"></script>
+<script src="table_files/libs/quarto-html/popper.min.js"></script>
+<script src="table_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="table_files/libs/quarto-html/anchor.min.js"></script>
+<link href="table_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="table_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="table_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="table_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="table_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="table_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="table_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
 
 </head>
@@ -141,40 +143,84 @@ The following object is masked from 'package:dplyr':
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(exp_men_Baseball, exp_women_Softball, diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Above entails an analysis of the average differences in expenses from 2015 to 2019 for collegiate baseball and softball in California. The average difference in expenses for a particular year for all California teams is plotted as a blue circle. The pink highlighted region represents adding or subtracting two standard errors of the average difference from the plotted average differences. This shaded region therefore represents a roughly 95% confidence interval for the true average difference for all collegiate baseball and softball teams in California between 2015 to 2019 that meet the conditions required for data collection. The average difference in expenses are consistantly greater than 0 along with the interval for said average differences, meaning the average expenses for baseball are consistantly signifigantly larger than the expenses for softball."</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> sports_dat <span class="sc">|&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_exp_men =</span> <span class="fu">mean</span>(exp_men_Baseball), </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_exp_women =</span> <span class="fu">mean</span>(exp_women_Softball),</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_diff =</span> <span class="fu">mean</span>(diff),</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">stan =</span> <span class="fu">sd</span>(diff)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">n</span>())</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean_diff, <span class="at">x =</span> year)) <span class="sc">+</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> mean_diff <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>stan, <span class="at">ymax =</span> mean_diff <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>stan), </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha=</span>.<span class="dv">5</span>, </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">color=</span><span class="st">"grey"</span>,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"pink"</span>) <span class="sc">+</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>, <span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>, </span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Average Difference in Expenses (Baseball-Softball)"</span>,</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>, </span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Fig 1. A Disparity in CA College Baseball and Softball Expenses"</span>, </span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Source: Department of Education"</span>) <span class="sc">+</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>)) <span class="sc">+</span> </span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>dollar, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">300000</span>)) </span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#data table using kable</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> sports_dat <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_exp_men =</span> <span class="fu">mean</span>(exp_men_Baseball), </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_exp_women =</span> <span class="fu">mean</span>(exp_women_Softball),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_diff =</span> <span class="fu">mean</span>(diff)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(table,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">caption=</span><span class="st">"Table 1. Average expenses for baseball and softball and the average differences between the two for participating California colleges between 2015 and 2019"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Year"</span>, </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Baseball Expenses ($)"</span>, </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Softball Expenses ($)"</span>,</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Differences ($)"</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>                    )) <span class="sc">|&gt;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">position =</span> <span class="st">"center"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">footnote</span>(<span class="at">general=</span><span class="st">"Source: Department of Education"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="graph_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="The figure shows an overall positive average difference in college softball and baseball expenses of between 100,000 and 200,000 dollars for California colleges from 2015 to 2019. The average difference appears to change at a relatively constant rate over time, slightly increasing from 2015 to 2018 and then decreasing from 2018 to 2019. The shaded region, representing adding and subtracting 2 standard errors from the average difference, seems to be around 100,000 dollars wide." width="672"></p>
-</figure>
-</div>
+<table class="lightable-classic table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Table 1. Average expenses for baseball and softball and the average differences between the two for participating California colleges between 2015 and 2019</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">Year</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Baseball Expenses ($)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Softball Expenses ($)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Differences ($)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">380821.4</td>
+<td style="text-align: right;">254361.6</td>
+<td style="text-align: right;">126459.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2016</td>
+<td style="text-align: right;">422943.3</td>
+<td style="text-align: right;">275632.5</td>
+<td style="text-align: right;">147310.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">446679.5</td>
+<td style="text-align: right;">296197.1</td>
+<td style="text-align: right;">150482.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">482359.2</td>
+<td style="text-align: right;">313640.0</td>
+<td style="text-align: right;">168719.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">457521.3</td>
+<td style="text-align: right;">300758.3</td>
+<td style="text-align: right;">156763.0</td>
+</tr>
+</tbody><tfoot>
+<tr class="even">
+<td style="text-align: right; padding: 0;"><span style="font-style: italic;">Note: </span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right; padding: 0;"><sup></sup> Source: Department of Education</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tfoot>
+
+</table>
+
+
 </div>
 </div>
 

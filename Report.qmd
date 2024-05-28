@@ -20,75 +20,89 @@ execute:
 #| label: setup
 #| output: false
 library(tidyverse)
+library(readxl)
 library(writexl)
+library(rstatix)
+library(tidyverse)
+library(kableExtra)
 #loading in data
-tuesdata <- tidytuesdayR::tt_load('2022-03-29')
-sports_dat <- tuesdata$sports
+#tuesdata <- tidytuesdayR::tt_load('2022-03-29')
+#sports_dat <- tuesdata$sports
+
+#data set creation that doesn't call git hub
+sports_dat <- read_excel("data/original_sub/original.xlsx")
 
 ```
 
 ```{r}
 #subsetting and moving data
-library(tidyverse)
-sports_dat2 <- sports_dat |>
-  filter(sports == "Baseball" | sports == "Softball") |>
-  mutate(
-    rev_men = ifelse(is.na(rev_men), 0, rev_men),
-    rev_women = ifelse(is.na(rev_women), 0, rev_women),
-    exp_men = ifelse(is.na(exp_men), 0, exp_men),
-    exp_women = ifelse(is.na(exp_women), 0, exp_women),
-  ) |>
-  filter(state_cd == "CA") |>
+sports_dat <- sports_dat |>
+  filter(sports == "Baseball" | sports == "Softball", state_cd == "CA") |>
   rename(Sport = sports) |>
   group_by(Sport, year) |>
   pivot_wider(id_cols = year:sector_name, names_from = Sport, values_from = exp_men:exp_women) |>
-  mutate(diff = exp_men_Baseball - exp_women_Softball)
+  mutate(diff = exp_men_Baseball - exp_women_Softball) |>
+  drop_na(exp_men_Baseball, exp_women_Softball, diff)
 ```
 
 ```{r}
-#| fig-alt: "The figure shows an overall positive trend for both college softball and baseball between average expenses and time from 2015 to 2018 for colleges in California. In 2019, however, the figure displays a slight negative trend for the average expenses for both sports. There appears to be more variability in the average expenses for baseball than for softball in any particular year. The average expenses for baseball are consistantly signifigantly larger than the expenses for women, although the expenses for both sports tend to increase at a similiar rate over time."
-#| fig-cap: "Above entails an analysis of the differences in average expenses from 2015 to 2019 for collegiate baseball and softball in California. The Department of Education collects data yearly on collegiate sports budgets in accordance to The Equity in Althletics Disclosure Act. The graph above consists of such data subsetted to contain soley softball and baseball teams from California in the years 2015 to 2019. The expense for a particular year averaged over all California softball teams is plotted as a blue triangle, wheras the expense averaged over all California baseball teams in a particular year is plotted as a red circle. The highlighted region represents adding or subtracting one standard error of the average from the plotted averages. There appears to be more variability in the average expenses for baseball than for softball in any particular year in California. The average expenses for baseball are consistantly signifigantly larger than the expenses for women, although the expenses for both sports tend to increase at a similiar rate over time."
+#| fig-alt: "The figure shows an overall positive average difference in college softball and baseball expenses of between 100,000 and 200,000 dollars for California colleges from 2015 to 2019. The average difference appears to change at a relatively constant rate over time, slightly increasing from 2015 to 2018 and then decreasing from 2018 to 2019. The shaded region, representing adding and subtracting 2 standard errors from the average difference, seems to be around 100,000 dollars wide."
+
+#| fig-cap: "Above entails an analysis of the average differences in expenses from 2015 to 2019 for collegiate baseball and softball in California. The average difference in expenses for a particular year for all California teams is plotted as a blue circle. The pink highlighted region represents adding or subtracting two standard errors of the average difference from the plotted average differences. This shaded region therefore represents a roughly 95% confidence interval for the true average difference for all collegiate baseball and softball teams in California between 2015 to 2019 that meet the conditions required for data collection. The average difference in expenses are consistantly greater than 0 along with the interval for said average differences, meaning the average expenses for baseball are consistantly signifigantly larger than the expenses for softball."
 
 
 plot <- sports_dat |>
-  filter(sports == "Baseball" | sports == "Softball") |>
-  rename(Sport = sports) |>
-  group_by(Sport, year) |>
-  filter(total_exp_menwomen != 0) |>
-  summarise(mean_exp = mean(total_exp_menwomen), stan = sd(total_exp_menwomen)/sqrt(n())) |>
-  ggplot(aes(y = mean_exp, x = year, color = Sport, shape=Sport, fill=Sport)) +
-   geom_ribbon(aes(ymin = mean_exp - stan, ymax = mean_exp + stan), alpha=.5, color=NA) +
-  geom_point(size=4) +
+  group_by(year) |>
+  summarize(mean_exp_men = mean(exp_men_Baseball), 
+            mean_exp_women = mean(exp_women_Softball),
+            mean_diff = mean(diff),
+            stan = sd(diff)/sqrt(n())
+  ) |>
+  ggplot(aes(y = mean_diff, x = year)) +
+  geom_ribbon(aes(ymin = mean_diff - 2*stan, ymax = mean_diff + 2*stan), 
+              alpha=.5, 
+              color="grey",
+              fill = "pink") +
+  theme_bw() +
+  theme_light() +
+  geom_point(size=4, color="blue") +
   geom_line() +
-  labs(x = "Year", subtitle = "Average Yearly Expense", y = "", title = "Fig 1. California College Baseball And Softball Expenses Over Time", caption = "Data Source (Department of Education)") +
-theme(plot.caption = element_text(hjust = 0)) + 
-scale_y_continuous(labels = scales::dollar)
+  labs(x = "Year", 
+       subtitle = "Average Difference in Expenses (Baseball-Softball)",
+       y = "", 
+       title = "Fig 1: A Disparity in CA College Baseball and Softball Expenses", 
+       caption = "Source: Department of Education") +
+  theme(plot.caption = element_text(hjust = 0)) + 
+  scale_y_continuous(labels = scales::dollar, limits=c(0,300000)) 
 
 plot
 
 ```
 
 ```{r}
-library(rstatix)
-library(kableExtra)
+#data table using kable
 table <- sports_dat |>
-  filter(sports == "Baseball" | sports == "Softball") |>
-  rename(Sport = sports) |>
-  group_by(Sport, year) |>
-  filter(total_exp_menwomen != 0) |>
-  summarise(mean_exp = mean(total_exp_menwomen)) |>
-  pivot_wider(id_cols = year, names_from = Sport, values_from = mean_exp) |>
-  rename(Year=year, Expenses_Men=Baseball, Expenses_Women=Softball)
+  group_by(year) |>
+  summarize(mean_exp_men = mean(exp_men_Baseball), 
+            mean_exp_women = mean(exp_women_Softball),
+            mean_diff = mean(diff)
+  ) 
 
 kable(table,
-      caption="<center>Table 1: CA Collegiate Baseball and Softball Expenses<center>",
+      caption="Average expenses for baseball and softball and the average differences between the two for participating California colleges between 2015 and 2019",
       col.names = c("Year", 
-                    "Expenses Baseball ($)", 
-                    "Expenses Softball ($)")) |>
+                    "Baseball Expenses ($)", 
+                    "Softball Expenses ($)",
+                    "Differences ($)"
+                    )
+      ) |>
   kable_classic() |>
   kable_styling(full_width = FALSE, position = "center") |>
-  footnote(general="Source: Department of Education")
+  footnote(general = "Source: Department of Education")
+```
 
-t.test(sports_dat2$exp_men_Baseball, sports_dat2$exp_women_Softball, paired=TRUE)
+```{r}
+#analysis
+t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE)
 ```
 
