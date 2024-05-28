@@ -30,7 +30,7 @@ sports_dat <- tuesdata$sports
 ```{r}
 #subsetting and moving data
 library(tidyverse)
-sports_dat <- sports_dat |>
+sports_dat2 <- sports_dat |>
   filter(sports == "Baseball" | sports == "Softball") |>
   mutate(
     rev_men = ifelse(is.na(rev_men), 0, rev_men),
@@ -51,6 +51,8 @@ sports_dat <- sports_dat |>
 
 
 plot <- sports_dat |>
+  filter(sports == "Baseball" | sports == "Softball") |>
+  rename(Sport = sports) |>
   group_by(Sport, year) |>
   filter(total_exp_menwomen != 0) |>
   summarise(mean_exp = mean(total_exp_menwomen), stan = sd(total_exp_menwomen)/sqrt(n())) |>
@@ -70,6 +72,8 @@ plot
 library(rstatix)
 library(kableExtra)
 table <- sports_dat |>
+  filter(sports == "Baseball" | sports == "Softball") |>
+  rename(Sport = sports) |>
   group_by(Sport, year) |>
   filter(total_exp_menwomen != 0) |>
   summarise(mean_exp = mean(total_exp_menwomen)) |>
@@ -85,6 +89,6 @@ kable(table,
   kable_styling(full_width = FALSE, position = "center") |>
   footnote(general="Source: Department of Education")
 
-t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE)
+t.test(sports_dat2$exp_men_Baseball, sports_dat2$exp_women_Softball, paired=TRUE)
 ```
 
