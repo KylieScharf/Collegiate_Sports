@@ -85,5 +85,6 @@ kable(table,
   kable_styling(full_width = FALSE, position = "center") |>
   footnote(general="Source: Department of Education")
 
+t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE)
 ```
 
