@@ -12,7 +12,6 @@ sports_dat <- tuesdata$sports
 write_xlsx(sports_dat, "data/original_sub/original.xlsx")
 ```
 
-
 ```{r}
 #subsetting and moving data
 sports_dat <- sports_dat |>
