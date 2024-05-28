@@ -1,4 +1,7 @@
 # Collegiate_Sports
 
 * Data
-- xxx.csv
+  - xxx.csv
+ 
+* Scripts
+  - cleaned data
