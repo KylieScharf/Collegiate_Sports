@@ -84,6 +84,6 @@ kable(table,
   kable_classic() |>
   kable_styling(full_width = FALSE, position = "center") |>
   footnote(general="Source: Department of Education")
-t_test(sports_dat, diff, alternative="greater")
+
 ```
 
