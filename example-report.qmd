@@ -1,0 +1,164 @@
+---
+title: "California's Unlevel Playing Field"
+date: last-modified
+date-format: "May 30, 2024"
+author: 
+    - name: Kylie Scharf
+      affil-id: 1
+    - name: Nicole Yee
+      affil-id: 1
+    - name: Curtis LeQuang
+      affil-id: 1
+    - name: Emma Durler
+      affil-id: 1
+affiliations:
+    - id: 1
+      name: Department of Statistics, Cal Poly - SLO
+abstract: "In our report, we investigated whether collegiate expenses are truly greater for baseball than for softball for schools in California from 2015 to 2019. Under Title IV federal student financial assistance programs, every year colleges across the United States must open their books and reveal the inner workings of their athletic departments. This requirement, set forth by the Equity in Athletics Disclosure Act, aims to ensure transparency in athletic funding, participation, and staffing. Since 2003, the Department of Education has collected data from 2,074 schools nationwide, 659 of which are located in California, through the Equity in Athletics Survey. Researching the expenses of certain sports that we are all interested in can help us determine if equality in funding is actually ensured. Our research contains a subsetted dataset of 659 California observations from 2015 to 2019, where each observation consists of a school in a particular year with a collegiate baseball or softball team. With this, we created a line graph containing a roughly 95% confidence interval to visually see if a significant difference existed. From the graph, we were able to visualize that the average difference in expenses each year and the confidence interval for such were clearly above 0. We then performed a paired t-test to confirm this, finding convincing evidence to conclude that baseball expenses are higher than softball expenses from 2015 to 2019 for California colleges like the ones who completed the survey."
+format: 
+  pdf:
+    number-sections: true
+    template-partials: 
+      - title.tex
+    include-in-header:
+      text: |
+        \usepackage[noblocks]{authblk}
+        \renewcommand*{\Authsep}{, }
+        \renewcommand*{\Authand}{, }
+        \renewcommand*{\Authands}{, }
+        \renewcommand\Affilfont{\small}
+execute: 
+  warning: false
+  message: false
+  echo: false
+bibliography: references.bib
+---
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(readxl)
+library(writexl)
+library(kableExtra)
+sports_dat <- read_excel("data/original_sub/original.xlsx")
+```
+
+```{r}
+#| label: data-cleaning
+#| output: false
+sports_dat <- sports_dat |>
+  filter(sports == "Baseball" | sports == "Softball", state_cd == "CA") |>
+  rename(Sport = sports) |>
+  group_by(Sport, year) |>
+  pivot_wider(id_cols = year:sector_name, names_from = Sport, values_from = exp_men:exp_women) |>
+  mutate(diff = exp_men_Baseball - exp_women_Softball) |>
+  drop_na(exp_men_Baseball, exp_women_Softball, diff)
+```
+
+```{r}
+#| label: data-analysis
+#| output: false
+#analysis
+t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE, alternative = "greater")
+
+#for confidence interval
+t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE)
+```
+
+## Introduction {#intro}
+
+In the sunny state of California, where the crack of the bat and the cheers of fans echo through the air, a tale of two sports unfolds. One is blessed with seemingly unlimited funds and admiration, and the other is left to fend for itself. A stark contrast in funding has long persisted between baseball and softball programs. For decades, college baseball has enjoyed a lion's share of financial support, with state-of-the-art facilities, top-tier coaching staff, and generous scholarship allocations. Meanwhile, softball programs, though equally deserving of investment and recognition, are often overlooked and underfunded. Dana Drew Shaw (2019) writes of specific examples of this, where many times softball teams are not granted access to locker rooms and are forced to change in the parking lot while baseball teams have locker rooms and offices right next to the fields they play on. The disparity serves as a barrier to the growth and development of female athletes, perpetuating inequality and hindering their ability to compete at the same level as their male counterparts. Denied access to resources and opportunities, female athletes are at a disadvantage both on and off the field, facing obstacles in their pursuit of academic and athletic success. This discrepancy becomes glaringly evident when examining the numbers. In our report, we aimed to answer the question of whether or not the average expenses of collegiate baseball are truly greater than softball in California from 2015 to 2019. The following section introduces the data, subsetting methods, and statistical analyses used to perform our analysis. We then report our findings and discuss the implications of such, Finally, we provide a conclusion and direction for future research.
+
+## Data and Methods
+
+### Data Collection
+
+The Equity in Athletics Disclosure Act requires all US colleges with a Title IV federal student financial assistance program to report on athletic funding, participation, and staffing for each sport and academic year [@OfficeOfPostsecondaryEducation2021b]. Since 2003, The Department of Education has collected data on collegiate sports budgets at 2,074 schools nationwide in obeyance of the act. The department created the Equity in Athletics Survey to collect such data. Each school that meets the requirements completes this survey annually for each of its athletics teams. We accessed this data through the Equity in Athletics Data Analysis (2003-2023) . This is a data set containing all survey responses from 2015 to 2019. Although the dataset contains various types of funding information for all participating schools, we are specifically interested in the expenses for each school’s softball and baseball program.
+
+### Statistical Analysis
+
+Prior to analysis, we subsetted the data to include only California schools’s softball and baseball programs. We did such using the tidyverse [@tidyverse] and readxl [@readxl] packages. We also used the writexl package [@writexl] to create permanent excel data sets. We then pivoted the data so that each school in each year represents one observation and contains information about the softball and baseball expenses as such. Our final data set included 659 records of information on the expenses, in dollars, of schools in California from 2015 to 2019 for softball and baseball alike. We also created a new variable to represent the difference in expenses for baseball and softball (baseball - softball) at each school. We visualized these differences in a table using the kableExtra package [@kableExtra]. We intended to average these differences to determine whether or not these expenses are truly greater for baseball than for softball. To do such, we performed a paired t-test to analyze the average differences and test whether or not they are statistically significant.
+
+We recognize that baseball and softball are not exactly equivalent sports, which will impact some of the differences between the data. We will keep this in mind when completing our data analysis and hope to address as much of this difference as possible.
+
+## Results {#results}
+
+In this report, we wanted to determine if, for the years 2015-2019, California collegiate expenses for baseball were on average greater than softball. California colleges reported their annual individual expenses for baseball and softball teams (n=659). @tbl-diff-summary breaks down the mean yearly expenses for each sport and the corresponding differences.
+
+```{r}
+#| label: tbl-diff-summary
+#| tbl-pos: "H"
+
+#data table using kable
+table <- sports_dat |>
+  group_by(year) |>
+  summarize(mean_exp_men = mean(exp_men_Baseball), 
+            mean_exp_women = mean(exp_women_Softball),
+            mean_diff = mean(diff)
+  ) 
+
+kable(table,
+      caption="Average expenses for baseball and softball and the average differences between the two for participating California colleges between 2015 and 2019",
+      col.names = c("Year", 
+                    "Baseball Expenses ($)", 
+                    "Softball Expenses ($)",
+                    "Differences ($)"
+                    )
+      ) |>
+  kable_classic() |>
+  kable_styling(full_width = FALSE, position = "center") |>
+  footnote(general = "Source: Department of Education")
+```
+
+After performing a paired t-test, we found evidence that baseball expenses were discernibly greater than softball (t = 14.542; df = 658, p \< 0.0001). Baseball expenses averaged about \$149,919 more than softball expenses (95% CI: 129676.6, 170162.3). More specifically, we are 95% confident that at the collegiate level, baseball expenses were, on average, between \$129,676 and \$170,162 greater than softball expenses.
+
+More prominently displayed in @fig-diff-plot, we can see that the average differences in expenses for a particular year are well above 0. The highlighted section in the figure represents a roughly 95% confidence interval for the true difference in expenses which we can also visualize as being clearly above 0 for the entirety of the interval.
+
+```{r}
+#| label: fig-diff-plot
+#| fig-alt: "The figure shows an overall positive average difference in college softball and baseball expenses of between 100,000 and 200,000 dollars for California colleges from 2015 to 2019. The average difference appears to change at a relatively constant rate over time, slightly increasing from 2015 to 2018 and then decreasing from 2018 to 2019. The shaded region, representing adding and subtracting 2 standard errors from the average difference, seems to be around 100,000 dollars wide."
+#| fig-cap: "Above entails an analysis of the average differences in expenses from 2015 to 2019 for collegiate baseball and softball in California. The average difference in expenses for a particular year for all California teams is plotted as a blue circle. The pink highlighted region represents adding or subtracting two standard errors of the average difference from the plotted average differences. This shaded region therefore represents a roughly 95% confidence interval for the true average difference for all collegiate baseball and softball teams in California between 2015 to 2019 that meet the conditions required for data collection. The average difference in expenses are consistantly greater than 0 along with the interval for said average differences, meaning the average expenses for baseball are consistantly signifigantly larger than the expenses for softball."
+#| fig-align: center
+#| fig-pos: "H"
+
+plot <- sports_dat |>
+  group_by(year) |>
+  summarize(mean_exp_men = mean(exp_men_Baseball), 
+            mean_exp_women = mean(exp_women_Softball),
+            mean_diff = mean(diff),
+            stan = sd(diff)/sqrt(n())
+  ) |>
+  ggplot(aes(y = mean_diff, x = year)) +
+  geom_ribbon(aes(ymin = mean_diff - 2*stan, ymax = mean_diff + 2*stan), 
+              alpha=.5, 
+              color="grey",
+              fill = "pink") +
+  theme_bw() +
+  theme_light() +
+  geom_point(size=4, color="blue") +
+  geom_line() +
+  labs(x = "Year", 
+       subtitle = "Average Difference in Expenses (Baseball-Softball)",
+       y = "", 
+       title = "A Disparity in CA College Baseball and Softball Expenses", 
+       caption = "Source: Department of Education") +
+  theme(plot.caption = element_text(hjust = 0)) + 
+  scale_y_continuous(labels = scales::dollar, limits=c(0,300000)) 
+
+plot
+
+
+```
+
+## Discussion
+
+Our analysis consists of a paired t-test performed in R that compares the difference in expenses between collegiate baseball and softball in California from 2015 to 2019. Given the t-value of 14.542 and p-value of \<0.0001 (where degrees of freedom = 658), we have convincing evidence to reject the null hypothesis. In context, we have statistically significant evidence to support the alternative hypothesis that the true mean difference in expenses between collegiate baseball and softball is not equal to 0, meaning baseball expenses are significantly greater than softball expenses. However, one limitation of this test is that we cannot assume causation from these results as our data came from an observational experiment. This also means we can only generalize these results to colleges/universities similar to those included in the study. Looking at our graph, we can see that the differences each year are greatly above 0, further supporting our alternative hypothesis. Regarding variability (represented by the shaded region of the graph), we see that each year has roughly the same amount of variability in the difference of the expenses. Lastly, the table shows how much higher average baseball expenses are each year compared to softball, further demonstrating how the difference between the two is large each year and therefore greater than 0.
+
+## Conclusion {#conclusion}
+
+Through our investigation of the difference in expenses between collegiate baseball and softball, we found that baseball consistently has higher average expenses in California over the years. This allowed us to conclude that the true mean difference between the two is not equal to 0. We created multiple visualizations, such as a line graph and a table, and performed a paired t-test using the expenses of softball and baseball teams in California from 2015-2019 in order to come to this conclusion. While we have extremely strong evidence of this statistically, the visual trends in our results provide further evidence. We were also able to see a similar trend in their difference over time as the magnitude of average baseball expenses minus average softball expenses was very consistent throughout every year. For further research, we wonder if this pattern of the difference of average expenses between the two exists through 2024, but since our data only includes data up to 2019, we can only assume. 
+
+## References {.unnumbered}
+
+U.S Department of Education. (2003-2023). *Equity in Athletics Data Analysis*. 
+https://ope.ed.gov/athletics/#/datafile/list
