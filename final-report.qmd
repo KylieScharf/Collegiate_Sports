@@ -93,6 +93,7 @@ In this report, we wanted to determine if, for the years 2015-2019, California c
 ```{r}
 #| label: tbl-diff-summary
 #| tbl-pos: "H"
+#| tbl-cap: "The average differences between baseball and softball expenses, the variability in such, and the number of participating California colleges for each year between 2015 and 2019"
 
 #data table using kable
 table <- sports_dat |>
@@ -103,7 +104,6 @@ table <- sports_dat |>
   ) 
 
 kable(table,
-      caption="The average differences between baseball and softball expenses, the variability in such, and the number of participating California colleges for each year between 2015 and 2019",
       col.names = c("Year", 
                     "Difference ($)",
                     "Standard Error ($)",
