@@ -1,7 +1,9 @@
 # Collegiate_Sports
 
   *Data
+  
     -original_sub
+    
       *original.xlsx : this contains the original source dataset 
 subsetted.xlsx : this contains the cleaned dataset used in our analysis; there is only one row for each school, subsetted to only California, the years 2015 to 2019, and with new individual columns for baseball expenses, softball expenses, and the differences
 Documents
