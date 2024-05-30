@@ -119,7 +119,8 @@ After looking at the table it becomes fairly clear that the expenses for basebal
 
 After performing a paired t-test, we found evidence that baseball expenses were discernibly greater than softball (t = 14.542; df = 658, p < 0.0001). Baseball expenses averaged about \$149,919 more than softball expenses (95% CI: 129676.6, 170162.3). More specifically, we are 95% confident that at the collegiate level, baseball expenses were, on average, between \$129,676 and \$170,162 greater than softball expenses.
 
-More prominently displayed in @fig-diff-plot, we can see that the average differences in expenses for a particular year are well above 0. The highlighted section in the figure represents a roughly 95% confidence interval for the true difference in expenses which we can also visualize as being clearly above 0 for the entirety of the interval.
+More prominently displayed in @fig-diff-plot, we can see that the average differences in expenses for a particular year are well above 0. The highlighted section in the figure represents a roughly 95% confidence interval for the true difference in expenses, where the width is two standard errors of the average differences, or $20,618. The entirety of the interval is clearly above 0 in the visualization.
+
 
 ```{r}
 #| label: fig-diff-plot
