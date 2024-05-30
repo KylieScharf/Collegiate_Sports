@@ -1,7 +1,7 @@
 # Collegiate_Sports
 
 * Data
-*     original_sub
+      * original_sub
     - Data
       -original_sub
        * original.xlsx : this contains the original source dataset 
