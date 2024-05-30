@@ -89,30 +89,6 @@ We recognize that baseball and softball are not exactly equivalent sports, which
 
 In this report, we wanted to determine if, for the years 2015-2019, California collegiate expenses for baseball were on average greater than softball. California colleges reported their annual individual expenses for baseball and softball teams (n=659). @tbl-diff-summary breaks down each year's average difference in expenses between the baseball and softball teams of an individual school, standard error of such difference, and number of participating California colleges.
 
-```{r}
-#| label: tbl-diff-summary
-#| tbl-cap: "Put caption here."
-#| tbl-pos: "H"
-
-library(dplyr)
-library(kableExtra)
-
-table <- sports_dat %>%
-  group_by(year) %>%
-  summarize(mean.diff = mean(diff),
-            stan = sd(diff) / sqrt(n()),
-            size = n()
-  ) %>%
-  kable(digits = 1,
-        col.names = c("Year", 
-                      "Difference ($)",
-                      "Standard Error ($)",
-                      "Sample Size"),
-        booktabs = TRUE
-  )
-
-```
-
 
 ```{r}
 #| label: tbl-diff-summary
