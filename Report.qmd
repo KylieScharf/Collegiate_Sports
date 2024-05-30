@@ -77,6 +77,7 @@ plot
 ```
 
 ```{r}
+#| tbl-cap: "Put caption here."
 #data table using kable
 table <- sports_dat |>
   group_by(year) |>
