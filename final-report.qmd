@@ -77,7 +77,7 @@ In our report, we aimed to answer the question of whether or not the average exp
 
 ### Data Collection
 
-The Equity in Athletics Disclosure Act requires all US colleges with a Title IV federal student financial assistance program to report on athletic funding, participation, and staffing for each sport and academic year [@OfficeOfPostsecondaryEducation2021b]. Since 2003, The Department of Education has collected data on collegiate sports budgets at 2,074 schools nationwide in obeyance of the act. The department created the Equity in Athletics Survey to collect such data. Each school that meets the requirements completes this survey annually for each of its athletics teams. We accessed this data through the Equity in Athletics Data Analysis (2003-2023). The obtained data set contains all survey responses from 2015 to 2019. Although the data set contains various types of funding information for all participating schools, we are specifically interested in the expenses for each school’s softball and baseball program.
+The Equity in Athletics Disclosure Act requires all US colleges with a Title IV federal student financial assistance program to report on athletic funding, participation, and staffing for each sport and academic year [@OfficeOfPostsecondaryEducation2021b]. Since 2003, The Department of Education has collected data on collegiate sports budgets at 2,074 schools nationwide in obeyance of the act. The department created the Equity in Athletics Survey to collect such data. Each school that meets the requirements completes this survey annually for each of its athletics teams. We accessed this data through the Equity in Athletics Data Analysis [@doe_data]. The obtained data set contains all survey responses from 2015 to 2019. Although the data set contains various types of funding information for all participating schools, we are specifically interested in the expenses for each school’s softball and baseball program.
 
 ### Statistical Analysis
 
@@ -175,6 +175,3 @@ We created multiple visualizations, such as a line graph and a table, and perfor
 For further research, we wonder if this pattern of the difference of average expenses between the two exists through 2024, but since our data only includes data up to 2019, we can only assume. Additional research is needed to explore the reasons behind these disparities and to identify effective strategies for achieving funding equality. Studies could also be expanded to other states and sports to provide a broader understanding of the issue. More research could also be conducted on the decrease in funding obverved in 2019 for both baseball and softball. 
 
 ## References {.unnumbered}
-
-U.S Department of Education. (2003-2023). *Equity in Athletics Data Analysis*. 
-https://ope.ed.gov/athletics/#/datafile/list
