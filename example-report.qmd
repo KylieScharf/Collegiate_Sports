@@ -91,6 +91,27 @@ In this report, we wanted to determine if, for the years 2015-2019, California c
 
 ```{r}
 #| label: tbl-diff-summary
+#| tbl-cap: "Put caption here."
+#| tbl-pos: "H"
+
+table <- sports_dat |> 
+  group_by(year) |> 
+  summarize(mean.diff = mean(diff, na.rm = T),
+            stan = sd(diff, na.rm = T),
+            size = n()
+            ) |> 
+  kableExtra::kbl(digits = 1,
+                  col.names = c("Year", 
+                                "Difference ($)",
+                                "Standard Error ($)",
+                                "Sample Size"),
+                  booktabs = TRUE
+                  )
+```
+
+
+```{r}
+#| label: tbl-diff-summary
 #| tbl-pos: "H"
 
 #data table using kable
