@@ -99,7 +99,11 @@ kable(table,
 ```
 
 ```{r}
+#| output: false
 #analysis
+t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE, alternative = "greater")
+
+#for confidence interval
 t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE)
 ```
 
