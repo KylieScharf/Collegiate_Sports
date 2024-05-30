@@ -1,7 +1,7 @@
 ---
 title: "California's Unlevel Playing Field"
 date: last-modified
-date-format: "May 30, 2024"
+date-format: "MMMM D, YYYY"
 author: 
     - name: Kylie Scharf
       affil-id: 1
