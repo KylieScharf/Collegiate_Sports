@@ -7,8 +7,8 @@
  * Documents
   	* Data Proposal.pdf : this is the Data Proposal mini project and contains a description of the data, references, preliminary research questions, and our group contract
 	* One Num Story.pdf : this is the One Number Story mini project related to the research question in our final report
- * example-report.pdf : this is a pdf of the rendered final report
- * example-report.qmd : this is the quarto document used to compile the final report
+ * final-report.pdf : this is a pdf of the rendered final report
+ * final-report.qmd : this is the quarto document used to compile the final report
  * references.bib : this contains citations to sources and R packages used in the final report
  * Report_files
 	* figure-pdf
