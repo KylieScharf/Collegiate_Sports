@@ -6,7 +6,7 @@
 	* subsetted.xlsx : this contains the cleaned dataset used in our analysis; there is only one row for each school, subsetted to only California, the years 2015 to 2019, and with new individual columns for baseball expenses, softball expenses, and the differences
  * Documents
   	* Data Proposal.pdf : this is the Data Proposal mini project and contains a description of the data, references, preliminary research questions, and our group contract
-    	* One Num Story.pdf : this is the One Number Story mini project related to the research question in our final report
+	* One Num Story.pdf : this is the One Number Story mini project related to the research question in our final report
  * example-report.pdf : this is a pdf of the rendered final report
  * example-report.qmd : this is the quarto document used to compile the final report
  * references.bib : this contains citations to sources and R packages used in the final report
