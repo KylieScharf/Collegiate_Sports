@@ -7,7 +7,7 @@
  * Documents
   	* Data Proposal.pdf : this is the Data Proposal mini project and contains a description of the data, references, preliminary research questions, and our group contract
 	* One Num Story.pdf : this is the One Number Story mini project related to the research question in our final report
-	* Stat 365_Storyboarding.pdf : this is storyboard for our project
+	* Stat 365_Storyboarding.pdf : this is the storyboard for our project
  * final-report.pdf : this is a pdf of the rendered final report
  * final-report.qmd : this is the quarto document used to compile the final report
  * references.bib : this contains citations to sources and R packages used in the final report
