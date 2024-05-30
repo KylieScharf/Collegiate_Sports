@@ -107,8 +107,9 @@ t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE, 
 #for confidence interval
 t.test(sports_dat$exp_men_Baseball, sports_dat$exp_women_Softball, paired=TRUE)
 
-#graph se
+#summary statistics
 2*(sd(sports_dat$diff)/sqrt(659))
+mean(sports_dat$diff)
 ```
 
 
