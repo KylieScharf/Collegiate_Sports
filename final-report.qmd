@@ -103,14 +103,10 @@ table <- sports_dat |>
             size = n()
   )
 
-# table$mean_diff=formatC(table$mean_diff,digits=2, format="f")
-# table$mean_diff=format(round(table$mean_diff,2),nsmall=2)
-
 print.money <- function(x) {
   print.default(paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=",")))
 }
-# table$mean_diff=sprintf(table$mean_diff,fmt='%.2f')
-# table$mean_diff=scales::dollar(as.numeric(table$mean_diff))
+
 table$mean_diff=print.money(table$mean_diff)
 table$stan=print.money(table$stan)
 
@@ -119,7 +115,8 @@ kable(table,
                     "Difference",
                     "Standard Error",
                     "Universities"
-                    )
+                    ),
+      align=c((rep('r',times=4)))
       ) |>
   kable_classic() |>
   kable_styling(full_width = FALSE, position = "center") |>
