@@ -95,20 +95,22 @@ In this report, we wanted to determine if, for the years 2015-2019, California c
 #| tbl-pos: "H"
 #| tbl-cap: "The average differences between baseball and softball expenses, the variability in such, and the number of participating California colleges for each year between 2015 and 2019."
 
+# money <- function(x) {
+#   print.default(paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=",")))
+# }
+money <- function(x) {
+  paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
+}
+
 #data table using kable
 table <- sports_dat |>
   group_by(year) |>
   summarize(mean_diff = mean(diff),
             stan = sd(diff)/sqrt(n()),
             size = n()
-  )
-
-print.money <- function(x) {
-  print.default(paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=",")))
-}
-
-table$mean_diff=print.money(table$mean_diff)
-table$stan=print.money(table$stan)
+  ) |>
+  mutate(mean_diff=money(mean_diff),
+         stan=money(stan))
 
 kable(table,
       col.names = c("Year", 
