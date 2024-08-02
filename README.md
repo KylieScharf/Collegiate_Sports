@@ -1,4 +1,4 @@
-# Collegiate_Sports
+# Collegiate Sports Expense Analysis
 
 * Data
 	* original_sub
